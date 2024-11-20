@@ -268,52 +268,44 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 
 
 		@Override
-		public T deleteElement(int pos) throws PosException, VacioException 
-		{
-			T elemento=null;
-			
-			if (pos>tamanoMax)
-			{
-				throw new PosException("La posición no es válida");
+		public T deleteElement(int pos) throws PosException, VacioException {
+			validarPosicion(pos); // Validar que la posición sea válida y la lista no esté vacía
+		
+			T elemento = elementos[pos];
+		
+			if (pos == 1) {
+				removeFirst(); // Eliminar el primer elemento
+			} else if (pos == tamanoAct) {
+				removeLast(); // Eliminar el último elemento
+			} else {
+				eliminarElementoIntermedio(pos); // Eliminar un elemento en posición intermedia
 			}
-			else if (pos<1)
-			{
-				throw new PosException("La posición no es válida");
-			}
-			else if (isEmpty())
-			{
+		
+			return elemento;
+		}
+		
+		// Método para validar que la posición sea válida
+		private void validarPosicion(int pos) throws PosException, VacioException {
+			if (isEmpty()) {
 				throw new VacioException("La lista está vacía");
 			}
-			else
-			{
-				elemento=elementos[pos];
-				if (pos==1)
-				{
-					removeFirst();
-				}
-				else if (pos==tamanoAct)
-				{
-					removeLast();
-				}
-				else
-				{
-					T [ ] copia = elementos;
-					elementos= (T[])new Comparable[tamanoMax];
-				
-					for (int i=0; i<pos-1; i++)
-					{
-						elementos[i]=copia[i];
-					}
-					
-					for(int i=pos-1; i<tamanoAct; i++)
-					{
-						elementos[i]=copia[i+1];
-					}
-					tamanoAct--;
-				}
+			if (pos < 1 || pos > tamanoAct) {
+				throw new PosException("La posición no es válida");
 			}
-
-			return elemento;
+		}
+		
+		// Método para manejar la eliminación de un elemento en posición intermedia
+		private void eliminarElementoIntermedio(int pos) {
+			T[] copia = elementos;
+			elementos = (T[]) new Comparable[tamanoMax];
+		
+			// Copiar los elementos antes de la posición
+			System.arraycopy(copia, 0, elementos, 0, pos - 1);
+		
+			// Copiar los elementos después de la posición
+			System.arraycopy(copia, pos, elementos, pos - 1, tamanoAct - pos);
+		
+			tamanoAct--;
 		}
 
 

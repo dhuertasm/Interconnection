@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import model.data_structures.ArregloDinamico;
 import model.data_structures.ILista;
 import model.data_structures.NullException;
 import model.data_structures.PosException;
@@ -43,7 +44,7 @@ public class Controller<T> {
 			switch(option){
 			case 1:
 				view.printMessage("--------- \nCargar datos");
-				modelo = new Modelo(1); 
+				modelo = new Modelo(new ArregloDinamico<>(1)); 
 				try 
 				{
 					modelo.cargar();
