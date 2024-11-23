@@ -16,7 +16,6 @@ import model.data_structures.GrafoListaAdyacencia;
 import model.data_structures.ILista;
 import model.data_structures.ITablaSimbolos;
 import model.data_structures.Landing;
-import model.data_structures.ListaEncadenada;
 import model.data_structures.NodoTS;
 import model.data_structures.NullException;
 import model.data_structures.PilaEncadenada;
