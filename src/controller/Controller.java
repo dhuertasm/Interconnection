@@ -41,7 +41,7 @@ public class Controller<T> {
 				try 
 				{
 					modelo.cargar();
-				} catch (IOException e) {
+				} catch (Exception e) {
 
 					e.printStackTrace();
 				}

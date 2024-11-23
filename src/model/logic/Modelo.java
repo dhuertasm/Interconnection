@@ -1,11 +1,7 @@
 package model.logic;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Comparator;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import model.data_structures.ArregloDinamico;
@@ -17,14 +13,12 @@ import model.data_structures.ILista;
 import model.data_structures.ITablaSimbolos;
 import model.data_structures.Landing;
 import model.data_structures.NodoTS;
-import model.data_structures.NullException;
 import model.data_structures.PilaEncadenada;
-import model.data_structures.PosException;
 import model.data_structures.TablaHashLinearProbing;
 import model.data_structures.TablaHashSeparteChaining;
-import model.data_structures.VacioException;
 import model.data_structures.Vertex;
 import model.data_structures.YoutubeVideo;
+import model.data_structures.ComparadorFactory.ListaProcessor;
 
 
 /**
@@ -46,6 +40,8 @@ public class Modelo {
 	private ITablaSimbolos landingidtabla;
 	
 	private ITablaSimbolos nombrecodigo;
+
+	private ILista unificado;
 
 	/**
 	 * Constructor del modelo del mundo con capacidad dada
@@ -70,10 +66,9 @@ public class Modelo {
 	 * Requerimiento buscar dato
 	 * @param dato Dato a buscar
 	 * @return dato encontrado
-	 * @throws VacioException 
-	 * @throws PosException 
+	 * @throws Exception 
 	 */
-	public YoutubeVideo getElement(int i) throws PosException, VacioException
+	public YoutubeVideo getElement(int i) throws Exception
 	{
 		return (YoutubeVideo) datos.getElement( i);
 	}
@@ -97,7 +92,7 @@ public class Modelo {
 			fragmento+= "\n Info último país: " + "\n Capital: "+ pais.getCapitalName() + "\n Población: " + pais.getPopulation()+
 			"\n Usuarios: "+ pais.getUsers();
 		} 
-		catch (PosException | VacioException e) 
+		catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,7 +117,7 @@ public class Modelo {
 					max= (int) lista.getElement(i);
 				}
 			}
-			catch(PosException | VacioException  e)
+			catch(Exception  e)
 			{
 				System.out.println(e.toString());
 			}
@@ -150,7 +145,7 @@ public class Modelo {
 				fragmento+= "\n Los landing points no pertenecen al mismo clúster";
 			}
 		} 
-		catch (PosException | VacioException e) 
+		catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -189,7 +184,7 @@ public class Modelo {
 					contador++;
 				}
 			}
-			catch (PosException | VacioException e) 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
@@ -300,7 +295,7 @@ public class Modelo {
 				tabla.put(arco.getDestination().getId(),arco.getSource() );
 			}
 			
-			ILista unificado= unificar(candidatos, "Vertice");
+			unificado= ListaProcessor.unificar(candidatos, "Vertice");
 			fragmento+= " La cantidad de nodos conectada a la red de expansión mínima es: " + unificado.size() + "\n El costo total es de: " + distancia;
 			
 			int maximo=0;
@@ -333,7 +328,7 @@ public class Modelo {
 				fragmento+= "\n Id " + i + " : "+ pop.getId();
 			}
 		}
-		catch (PosException | VacioException | NullException e1) 
+		catch (Exception e1) 
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -360,7 +355,7 @@ public class Modelo {
 			Country paisoriginal=(Country) paises.get(((Landing) ((Vertex)lista.getElement(1)).getInfo()).getPais());
 			countries.insertElement(paisoriginal, countries.size() + 1);
 		} 
-		catch (PosException | VacioException | NullException e1) 
+		catch (Exception e1) 
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -394,13 +389,13 @@ public class Modelo {
 					}
 				}
 				
-			} catch (PosException | VacioException | NullException e) 
+			} catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
 		}
 		
-		ILista unificado= unificar(countries, "Country");
+		unificado= ListaProcessor.unificar(countries, "Country");
 		
 		Comparator<Country> comparador=null;
 
@@ -415,7 +410,7 @@ public class Modelo {
 				unificado.ordenarMergeSort(unificado, comparador, true);
 			}	
 		}
-		catch (PosException | VacioException| NullException  e) 
+		catch (Exception  e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -436,7 +431,7 @@ public class Modelo {
 		{
 			try {
 				fragmento+= "\n Nombre: " + ((Country) afectados.getElement(i)).getCountryName() + "\n Distancia al landing point: " + ((Country) afectados.getElement(i)).getDistlan();
-			} catch (PosException | VacioException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -447,68 +442,7 @@ public class Modelo {
 		
 	}
 	
-	public ILista unificar(ILista lista, String criterio) {
-		ILista lista2 = new ArregloDinamico(1);
-	
-		if (lista == null) {
-			return lista2; // Devuelve una lista vacía si la entrada es nula
-		}
-	
-		try {
-			if (criterio.equals("Vertice")) {
-				procesarListaVertex(lista, lista2, new Vertex.ComparadorXKey());
-			} else {
-				procesarListaVertexCountry(lista, lista2, new Country.ComparadorXNombre());
-			}
-		} catch (PosException | VacioException | NullException e) {
-			e.printStackTrace();
-		}
-	
-		return lista2;
-	}
-	
-	private  void procesarListaVertex(ILista lista, ILista lista2, Comparator<Vertex<String, Landing>> comparador) 
-			throws PosException, VacioException, NullException {
-		// Ordenar la lista
-		lista.ordenarMergeSort(lista, comparador, false);
-	
-		// Unificar elementos
-		for (int i = 1; i <= lista.size(); i++) {
-			Vertex actual = (Vertex) lista.getElement(i);
-			Vertex siguiente = i + 1 <= lista.size() ? (Vertex) lista.getElement(i + 1) : null;
-	
-			if (esElementoUnico(actual, siguiente, comparador)) {
-				lista2.insertElement(actual, lista2.size() + 1);
-			}
-		}
-	}
-
-	private  void procesarListaVertexCountry(ILista lista, ILista lista2, Comparator<Country> comparador) 
-			throws PosException, VacioException, NullException {
-		// Ordenar la lista
-		lista.ordenarMergeSort(lista, comparador, false);
-	
-		// Unificar elementos
-		for (int i = 1; i <= lista.size(); i++) {
-			Country actual = (Country) lista.getElement(i);
-			Country siguiente = i + 1 <= lista.size() ? (Country) lista.getElement(i + 1) : null;
-	
-			if (esElementoUnico(actual, siguiente, comparador)) {
-				lista2.insertElement(actual, lista2.size() + 1);
-			}
-		}
-	}
-
-	
-	
-	private <T> boolean esElementoUnico(T actual, T siguiente, Comparator<T> comparador) {
-		if (siguiente != null) {
-			return comparador.compare(actual, siguiente) != 0;
-		}
-		return true; // Último elemento siempre se considera único
-	}
-
-	public void cargar() throws IOException {
+	public void cargar() throws Exception {
 		inicializarEstructuras();
 		cargarPaises("./data/countries.csv");
 		cargarLandingPoints("./data/landing_points.csv");
@@ -524,9 +458,8 @@ public class Modelo {
 		nombrecodigo = new TablaHashSeparteChaining(2);
 	}
 
-	private void cargarPaises(String filePath) throws IOException {
-		Reader in = new FileReader(filePath);
-		Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader().parse(in);
+	private void cargarPaises(String filePath) throws Exception {
+		Iterable<CSVRecord> records = new CargarCSV().cargarCSV(filePath);
 	
 		for (CSVRecord record : records) {
 			if (!record.get(0).isEmpty()) {
@@ -549,9 +482,8 @@ public class Modelo {
 		return new Country(countryName, capitalName, latitude, longitude, code, continentName, population, users);
 	}
 
-	private void cargarLandingPoints(String filePath) throws IOException {
-		Reader in = new FileReader(filePath);
-		Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader().parse(in);
+	private void cargarLandingPoints(String filePath) throws Exception {
+		Iterable<CSVRecord> records = new CargarCSV().cargarCSV(filePath);
 	
 		for (CSVRecord record : records) {
 			Landing landing = crearLandingDesdeRegistro(record);
@@ -570,9 +502,8 @@ public class Modelo {
 		return new Landing(landingId, id, name, countryName, latitude, longitude);
 	}
 
-	private void cargarConexiones(String filePath) throws IOException {
-		Reader in = new FileReader(filePath);
-		Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader().parse(in);
+	private void cargarConexiones(String filePath) throws Exception {
+		Iterable<CSVRecord> records = new CargarCSV().cargarCSV(filePath);
 	
 		for (CSVRecord record : records) {
 			procesarConexion(record);
@@ -649,7 +580,7 @@ public class Modelo {
 			}
 			vertices.insertElement(vertex, vertices.size() + 1);
 			nombrecodigo.put(landing.getName(), landing.getLandingId());
-		} catch (PosException | NullException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -660,12 +591,12 @@ public class Modelo {
 			for (int i = 1; i <= valores.size(); i++) {
 				conectarVertices((ILista) valores.getElement(i));
 			}
-		} catch (PosException | VacioException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void conectarVertices(ILista vertices) throws PosException, VacioException  {
+	private void conectarVertices(ILista vertices) throws Exception  {
 		if (vertices != null) {
 			for (int i = 1; i <= vertices.size(); i++) {
 				Vertex vertice1 = (Vertex) vertices.getElement(i);
@@ -703,6 +634,4 @@ public class Modelo {
 	}
 
 	
-
-
 }
