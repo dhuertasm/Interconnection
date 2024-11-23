@@ -1,6 +1,8 @@
 package model.data_structures;
 
-public interface ILista<T extends Comparable <T>> extends Comparable <ILista<T>>{
+import java.util.Comparator;
+
+public interface ILista<T extends Comparable <T>> extends Comparable <ILista<T>> {
 	
 	public void addFirst(T element);
 	
@@ -29,6 +31,14 @@ public interface ILista<T extends Comparable <T>> extends Comparable <ILista<T>>
 	public void exchange(int pos1, int pos2) throws PosException, VacioException;
 	
 	public void changeInfo(int pos, T element) throws PosException, VacioException, NullException;
+
+	public void ordenarSeleccion(Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException;
+	public void ordenarInsercion(Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException;
+	public void ordenarShell (Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException;
+	public void sort (ILista<T> lista,Comparator<T> criterio, boolean ascendente, int lo, int hi) throws PosException, VacioException;
+	public void ordenarQuickSort(Comparator<T> criterio, boolean ascendente) throws PosException, VacioException;
+	public int partition(ILista<T> lista,Comparator<T> criterio, boolean ascendente, int lo, int hi) throws PosException, VacioException;
+	public void ordenarMergeSort(ILista<T> lista,Comparator<T> criterio, boolean ascendente) throws PosException, VacioException, NullException;
 	
 	/**
 	 * Crear una sublista de la lista original (this).

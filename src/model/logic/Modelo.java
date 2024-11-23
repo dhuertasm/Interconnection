@@ -26,7 +26,6 @@ import model.data_structures.TablaHashSeparteChaining;
 import model.data_structures.VacioException;
 import model.data_structures.Vertex;
 import model.data_structures.YoutubeVideo;
-import utils.Ordenamiento;
 
 
 /**
@@ -53,9 +52,9 @@ public class Modelo {
 	 * Constructor del modelo del mundo con capacidad dada
 	 * @param tamano
 	 */
-	public Modelo(ILista datos)
+	public Modelo(int capacidad)
 	{
-		this.datos = datos;
+		this.datos = new ArregloDinamico<>(capacidad);
 	}
 
 	/**
@@ -406,7 +405,6 @@ public class Modelo {
 		
 		Comparator<Country> comparador=null;
 
-		Ordenamiento<Country> algsOrdenamientoEventos=new Ordenamiento<Country>();
 
 		comparador= new ComparadorXKm();
 
@@ -415,7 +413,7 @@ public class Modelo {
 
 			if (lista!=null)
 			{
-				algsOrdenamientoEventos.ordenarMergeSort(unificado, comparador, true);
+				unificado.ordenarMergeSort(unificado, comparador, true);
 			}	
 		}
 		catch (PosException | VacioException| NullException  e) 
@@ -459,9 +457,9 @@ public class Modelo {
 	
 		try {
 			if (criterio.equals("Vertice")) {
-				procesarListaVertex(lista, lista2, new Vertex.ComparadorXKey(), new Ordenamiento<Vertex<String, Landing>>());
+				procesarListaVertex(lista, lista2, new Vertex.ComparadorXKey());
 			} else {
-				procesarListaVertexCountry(lista, lista2, new Country.ComparadorXNombre(), new Ordenamiento<Country>());
+				procesarListaVertexCountry(lista, lista2, new Country.ComparadorXNombre());
 			}
 		} catch (PosException | VacioException | NullException e) {
 			e.printStackTrace();
@@ -470,10 +468,10 @@ public class Modelo {
 		return lista2;
 	}
 	
-	private  void procesarListaVertex(ILista lista, ILista lista2, Comparator<Vertex<String, Landing>> comparador, Ordenamiento<Vertex<String, Landing>> algoritmoOrdenamiento) 
+	private  void procesarListaVertex(ILista lista, ILista lista2, Comparator<Vertex<String, Landing>> comparador) 
 			throws PosException, VacioException, NullException {
 		// Ordenar la lista
-		algoritmoOrdenamiento.ordenarMergeSort(lista, comparador, false);
+		lista.ordenarMergeSort(lista, comparador, false);
 	
 		// Unificar elementos
 		for (int i = 1; i <= lista.size(); i++) {
@@ -486,10 +484,10 @@ public class Modelo {
 		}
 	}
 
-	private  void procesarListaVertexCountry(ILista lista, ILista lista2, Comparator<Country> comparador, Ordenamiento<Country> algoritmoOrdenamiento) 
+	private  void procesarListaVertexCountry(ILista lista, ILista lista2, Comparator<Country> comparador) 
 			throws PosException, VacioException, NullException {
 		// Ordenar la lista
-		algoritmoOrdenamiento.ordenarMergeSort(lista, comparador, false);
+		lista.ordenarMergeSort(lista, comparador, false);
 	
 		// Unificar elementos
 		for (int i = 1; i <= lista.size(); i++) {
@@ -704,6 +702,8 @@ public class Modelo {
 		return (int) distance;
 
 	}
+
+	
 
 
 }

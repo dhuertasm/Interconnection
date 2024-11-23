@@ -1,6 +1,6 @@
 package model.data_structures;
 
-
+import java.util.Comparator;
 
 public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 		/**
@@ -473,5 +473,174 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 			// TODO Auto-generated method stub
 			return 0;
 		}
+
+		public void ordenarSeleccion(Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException
+	{
+		for (int i=1; i<=this.size(); i++)
+		{
+			int posMayorMenor= i;
+			
+			for (int j=i+1; j<=this.size(); j++)
+			{
+				int factorComparacion= (ascendente ? 1:-1)* criterio.compare(this.getElement(posMayorMenor), this.getElement(j));
+				if (factorComparacion > 0)
+				{
+					posMayorMenor=j;
+				}
+			}
+			this.exchange(posMayorMenor, i);
+		}
+	}
+
+	public void ordenarInsercion(Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException
+	{
+		
+		for (int i=2; i<= this.size(); i++)
+		{
+			boolean enPosicion=false;
+			
+			for (int j=i; j>1 && !enPosicion; j--)
+			{
+				int factorComparacion= (ascendente ?1:-1) * criterio.compare(this.getElement(j), this.getElement(j-1));
+				if (factorComparacion<0)
+				{
+					this.exchange(j, j-1);
+				}
+				else
+				{
+					enPosicion=true;
+				}
+			}
+		}
+	
+	}
+
+	public void ordenarShell (Comparator<T> criterio, boolean ascendente ) throws PosException, VacioException
+	{
+		int n=this.size();
+		int h=1;
+		
+		while(h<(n/3))
+		{
+			h=3*h +1;
+		}
+		
+		while(h>=1)
+		{
+			for(int i=h+1; i<=n; i++)
+			{
+				boolean enPosicion= false;
+				
+				for(int j=i; j>h && !enPosicion; j-=h)
+				{
+					int factorComparacion= (ascendente ?1:-1)*criterio.compare(this.getElement(j), this.getElement(j-h));
+					
+					if (factorComparacion<0)
+					{
+						this.exchange(j, j-h);
+					}
+					else
+					{
+						enPosicion=true;
+					}
+				}
+			}
+			
+			h/=3;
+		}
+	}
+
+	public void sort (ILista<T> lista, Comparator<T> criterio, boolean ascendente, int lo, int hi) throws PosException, VacioException
+	{
+		if(lo>=hi)
+			return;
+		int pivot= partition(this, criterio, ascendente, lo, hi);
+		sort(this, criterio, ascendente, lo, pivot-1);
+		sort(this, criterio, ascendente, pivot +1, hi);
+	}
+
+	public void ordenarQuickSort(Comparator<T> criterio, boolean ascendente) throws PosException, VacioException
+	{
+		sort(this, criterio, ascendente, 1, this.size());
+	}
+
+	public int partition(ILista<T> lista, Comparator<T> criterio, boolean ascendente, int lo, int hi) throws PosException, VacioException
+	{
+		int follower, leader;
+		follower=leader=lo;
+		
+		while(leader<hi)
+		{
+			int factorComparacion=(ascendente?1:-1)*criterio.compare(this.getElement(leader), this.getElement(hi));
+			if (factorComparacion<0)
+			{
+				this.exchange(follower, leader);
+				follower++;
+			}
+			leader++;
+		}
+		
+		this.exchange(follower, hi);
+		
+		return follower;
+	}
+
+	public final void ordenarMergeSort(ILista<T> lista, Comparator<T> criterio, boolean ascendente) throws PosException, VacioException, NullException
+	{
+		int size = this.size();
+		if(size > 1)
+		{
+			int mid = size/2;
+			//Se divide la lista original en dos partes, izquierda y derecha, desde el punto mid.
+			ILista<T> leftList = this.sublista(1, mid);
+			ILista<T> rightList = this.sublista(mid+1, size - mid);
+
+			//Se hace el llamado recursivo con la lista izquierda y derecha.
+			ordenarMergeSort(leftList, criterio, ascendente);
+			ordenarMergeSort(rightList, criterio, ascendente);
+			
+			//i recorre la lista de la izquierda, j la derecha y k la lista original.
+			int i,j,k;
+			i=j=k= 1;
+			
+			int leftelements = leftList.size();
+			int rightelements = rightList.size();
+			
+			while(i <= leftelements && j <= rightelements)
+			{
+				T elemi = leftList.getElement(i);
+				T elemj = rightList.getElement(j);
+				//Compara y ordena los elementos
+				int factorComparacion = (ascendente?1:-1) * criterio.compare(elemi, elemj);
+				
+				if(factorComparacion <= 0) 
+				{
+					this.changeInfo(k, elemi);
+					i++;
+				}
+				else
+				{
+					this.changeInfo(k, elemj);
+					j++;
+				}
+				k++;
+			}
+			
+			//Agrega los elementos que no se compararon y están ordenados
+			while(i <= leftelements)
+			{
+				this.changeInfo(k, leftList.getElement(i));
+				i++;
+				k++;
+			}
+			
+			while(j <= rightelements)
+			{
+				this.changeInfo(k, rightList.getElement(j));
+				j++;
+				k++;
+			}
+		}
+	}
 
 }

@@ -30,7 +30,7 @@ public class View
 			System.out.println(mensaje);
 		}		
 		
-		public void printModelo(Modelo modelo)
+		public void printModelo(String modelo)
 		{
 			System.out.println(modelo);
 		}
