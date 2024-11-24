@@ -41,7 +41,7 @@ public class ComparadorFactory {
                 } else {
                     procesarListaVertexCountry(lista, lista2, ComparadorFactory.getCountryComparator());
                 }
-            } catch (PosException | VacioException | NullException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -49,7 +49,7 @@ public class ComparadorFactory {
         }
 
         private static void procesarListaVertex(ILista lista, ILista lista2, Comparator<Vertex<String, Landing>> comparador)
-                throws PosException, VacioException, NullException {
+                throws Exception {
             // Ordenar la lista
             lista.ordenarMergeSort(lista, comparador, false);
 
@@ -65,7 +65,7 @@ public class ComparadorFactory {
         }
 
         private static void procesarListaVertexCountry(ILista lista, ILista lista2, Comparator<Country> comparador)
-                throws PosException, VacioException, NullException {
+                throws Exception {
             // Ordenar la lista
             lista.ordenarMergeSort(lista, comparador, false);
 

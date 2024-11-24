@@ -24,7 +24,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 			{
 				listaNodos.insertElement(null, i);
 			} 
-			catch (PosException | NullException e) 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
@@ -48,7 +48,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 			tamanoAct++;
 
 		} 
-		catch (PosException | VacioException| NullException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -78,7 +78,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				}
 			}
 		} 
-		catch (PosException | VacioException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -117,7 +117,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				}
 
 			} 
-			catch (PosException | VacioException e) 
+			catch (Exception e) 
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -170,7 +170,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				throw new PosException("No está el elemento");
 			}
 		}
-		catch (PosException | VacioException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -216,7 +216,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				}
 			}
 		}
-		catch (PosException | NullException | VacioException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -238,7 +238,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 					lista.insertElement(listaNodos.getElement(i).getValue(), lista.size()+1);
 				}
 			} 
-			catch (PosException | NullException | VacioException e) 
+			catch (Exception e) 
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -269,7 +269,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				}
 			}
 		}
-		catch (PosException | NullException | VacioException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -301,7 +301,7 @@ public class TablaHashLinearProbing <K extends Comparable<K>, V extends Comparab
 				put(actual.getKey(), actual.getValue());
 			}
 		}
-		catch (NullException| VacioException| PosException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

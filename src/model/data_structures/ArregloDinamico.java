@@ -347,7 +347,7 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 
 	}
 
-	public ILista<T> sublista(int pos, int numElementos) throws PosException, VacioException, NullException {
+	public ILista<T> sublista(int pos, int numElementos) throws Exception {
 		if (isEmpty()) {
 			throw new VacioException("La lista está vacía");
 		} else if (numElementos < 0) {
@@ -466,7 +466,7 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
 	}
 
 	public final void ordenarMergeSort(ILista<T> lista, Comparator<T> criterio, boolean ascendente)
-			throws PosException, VacioException, NullException {
+			throws Exception {
 		int size = this.size();
 		if (size > 1) {
 			int mid = size / 2;
