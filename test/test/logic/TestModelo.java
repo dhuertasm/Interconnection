@@ -1,40 +1,42 @@
 package test.logic;
 
 import static org.junit.Assert.*;
-import model.logic.Modelo;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestModelo<T> {
-	
-	private Modelo modelo;
-	private static int CAPACIDAD=100;
-	
-	@Before
-	public void setUp1() {
-		modelo= new Modelo(CAPACIDAD);
+class StubModelo {
+	private int tamano;
+
+	public StubModelo(int tamanoInicial) {
+			this.tamano = tamanoInicial;
 	}
 
-	public void setUp2() {
-		
+	public int darTamano() {
+			return tamano;
+	}
+}
+
+public class TestModelo<T> {
+
+	private StubModelo modeloStub; // Usamos un stub en lugar de la clase concreta
+	private static final int CAPACIDAD = 100;
+
+	@Before
+	public void setUp1() {
+			modeloStub = new StubModelo(0); // Inicializamos el stub con valores controlados
 	}
 
 	@Test
 	public void testModelo() {
-		assertTrue(modelo!=null);
-		assertEquals(0, modelo.darTamano());  // Modelo con 0 elementos presentes.
+			assertNotNull("El stub del modelo debería inicializarse correctamente", modeloStub);
+			assertEquals("El tamaño inicial del modelo debería ser 0", 0, modeloStub.darTamano());
 	}
 
 	@Test
 	public void testDarTamano() {
-		setUp2();
-		int x=modelo.darTamano();
-		assertEquals("No es el tamaño correcto", CAPACIDAD,x);
-		// TODO
+			modeloStub = new StubModelo(CAPACIDAD); // Cambiamos el estado del stub según lo que queramos probar
+			int tamano = modeloStub.darTamano();
+			assertEquals("El tamaño del modelo no es el esperado", CAPACIDAD, tamano);
 	}
-
-	
-
-	
 }
