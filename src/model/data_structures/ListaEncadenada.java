@@ -360,7 +360,7 @@ public class ListaEncadenada <T extends Comparable <T>> implements ILista<T>{
 		}
 	}
 	
-	public void changeInfo(int pos, T element) throws PosException, VacioException, NullException
+	public void changeInfo(int pos, T element) throws Exception
 	{
 		if (pos<1 || pos >size)
 		{
@@ -388,7 +388,7 @@ public class ListaEncadenada <T extends Comparable <T>> implements ILista<T>{
 
 	}
 	
-	public ILista<T> sublista(int pos, int numElementos) throws PosException, VacioException, NullException
+	public ILista<T> sublista(int pos, int numElementos) throws Exception
 	{
 		if (isEmpty())
 		{
@@ -535,7 +535,7 @@ public class ListaEncadenada <T extends Comparable <T>> implements ILista<T>{
 		return follower;
 	}
 
-	public final void ordenarMergeSort(ILista<T> lista, Comparator<T> criterio, boolean ascendente) throws PosException, VacioException, NullException
+	public final void ordenarMergeSort(ILista<T> lista, Comparator<T> criterio, boolean ascendente) throws Exception
 	{
 		int size = this.size();
 		if(size > 1)

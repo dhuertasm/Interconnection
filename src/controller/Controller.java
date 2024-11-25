@@ -19,9 +19,10 @@ public class Controller<T> {
 	 * Crear la vista y el modelo del proyecto
 	 * @param capacidad tamaNo inicial del arreglo
 	 */
-	public Controller ()
+	public Controller (Modelo modelo, View view)
 	{
-		view = new View();
+		this.modelo = modelo;
+		this.view = view;
 	}
 		
 	public void run() 
@@ -37,11 +38,10 @@ public class Controller<T> {
 			switch(option){
 			case 1:
 				view.printMessage("--------- \nCargar datos");
-				modelo = new Modelo(1); 
 				try 
 				{
 					modelo.cargar();
-				} catch (IOException e) {
+				} catch (Exception e) {
 
 					e.printStackTrace();
 				}

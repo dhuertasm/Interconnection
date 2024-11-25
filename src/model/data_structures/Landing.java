@@ -1,23 +1,21 @@
 package model.data_structures;
 
-public class Landing implements Comparable <Landing>
-{
+public class Landing implements Comparable<Landing> {
 	private String landingId;
-	
+
 	private String id;
-	
+
 	private String name;
-	
+
 	private String pais;
-	
+
 	private double latitude;
-	
+
 	private double longitude;
-	
-	private String codigo; 
-	
-	public Landing(String plandingid, String pid, String pname, String ppais, double platitude, double plongitude)
-	{
+
+	private String codigo;
+
+	public Landing(String plandingid, String pid, String pname, String ppais, double platitude, double plongitude) {
 		setLandingId(plandingid);
 		setId(pid);
 		setName(pname);
@@ -68,14 +66,12 @@ public class Landing implements Comparable <Landing>
 	}
 
 	@Override
-	public int compareTo(Landing o) 
-	{
+	public int compareTo(Landing o) {
 		System.out.print("holis");
 		return 0;
 	}
 
-	public String getPais() 
-	{
+	public String getPais() {
 		return pais;
 	}
 
@@ -89,5 +85,13 @@ public class Landing implements Comparable <Landing>
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
+	}
+
+	@Override
+	public String toString() {
+		return "Identificador: " + getId() +
+				"\nNombre: " + getName() +
+				"\nLatitud: " + getLatitude() +
+				"\nLongitud: " + getLongitude();
 	}
 }
